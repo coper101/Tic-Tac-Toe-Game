@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.daryl.tictactoegame.Screens.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_gameRoomsFragment"
+            app:destination="@id/gameRoomsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_waitingRoomFragment"
+            app:destination="@id/waitingRoomFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameRoomFragment"
+        android:name="com.daryl.tictactoegame.Screens.GameRoomFragment"
+        android:label="fragment_game_room"
+        tools:layout="@layout/fragment_game_room">
+        <argument
+            android:name="game_room"
+            app:argType="com.daryl.tictactoegame.Data.GameRoom" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameRoomsFragment"
+        android:name="com.daryl.tictactoegame.Screens.GameRoomsFragment"
+        android:label="fragment_game_rooms"
+        tools:layout="@layout/fragment_game_rooms" >
+        <action
+            android:id="@+id/action_gameRoomsFragment_to_waitingRoomFragment"
+            app:destination="@id/waitingRoomFragment">
+            <argument
+                android:name="game_room"
+                app:argType="com.daryl.tictactoegame.Data.GameRoom" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/waitingRoomFragment"
+        android:name="com.daryl.tictactoegame.Screens.WaitingRoomFragment"
+        android:label="fragment_waiting_room"
+        tools:layout="@layout/fragment_waiting_room" >
+        <action
+            android:id="@+id/action_waitingRoomFragment_to_gameRoomFragment"
+            app:destination="@id/gameRoomFragment">
+            <argument
+                android:name="game_room"
+                app:argType="com.daryl.tictactoegame.Data.GameRoom" />
+        </action>
+        <argument
+            android:name="game_room"
+            app:argType="com.daryl.tictactoegame.Data.GameRoom" />
+    </fragment>
+</navigation>
