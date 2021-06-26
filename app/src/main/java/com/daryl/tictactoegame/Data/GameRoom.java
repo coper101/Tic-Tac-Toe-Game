@@ -5,7 +5,9 @@ import java.util.Arrays;
 
 public class GameRoom implements Serializable {
 
-    private String id, name, p1, p2, winner, turn, board;
+    private String id, name, p1, p2, board;
+    private int winner, turn;
+    private boolean p1Ready, p2Ready;
 
     public GameRoom() {}
 
@@ -14,9 +16,9 @@ public class GameRoom implements Serializable {
         name = "My Game Room";
         p1 = "Player 1";
         p2 = "";
-        winner = "";
-        turn = "";
-        int[][] boardInt = new int[3][3];
+        winner = Winner.NONE.ordinal();
+        turn = Turn.BOTH.ordinal();
+        final int[][] boardInt = new int[3][3];
         board = Arrays.deepToString(boardInt);
     }
 
@@ -52,19 +54,19 @@ public class GameRoom implements Serializable {
         this.p2 = p2;
     }
 
-    public String getWinner() {
+    public int getWinner() {
         return winner;
     }
 
-    public void setWinner(String winner) {
+    public void setWinner(int winner) {
         this.winner = winner;
     }
 
-    public String getTurn() {
+    public int getTurn() {
         return turn;
     }
 
-    public void setTurn(String turn) {
+    public void setTurn(int turn) {
         this.turn = turn;
     }
 
@@ -75,4 +77,49 @@ public class GameRoom implements Serializable {
     public void setBoard(String board) {
         this.board = board;
     }
+
+    public boolean isP1Ready() {
+        return p1Ready;
+    }
+
+    public void setP1Ready(boolean p1Ready) {
+        this.p1Ready = p1Ready;
+    }
+
+    public boolean isP2Ready() {
+        return p2Ready;
+    }
+
+    public void setP2Ready(boolean p2Ready) {
+        this.p2Ready = p2Ready;
+    }
+
+    @Override
+    public String toString() {
+        return "GameRoom{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", p1='" + p1 + '\'' +
+                ", p2='" + p2 + '\'' +
+                ", winner='" + winner + '\'' +
+                ", turn='" + turn + '\'' +
+                ", board='" + board + '\'' +
+                ", p1Ready=" + p1Ready +
+                ", p2Ready=" + p2Ready +
+                '}';
+    }
+
+    public enum Turn {
+        BOTH, P1, P2
+    }
+
+    public enum Winner {
+        NONE, P1, P2, TIE
+    }
+
+    public enum MARK {
+        EMPTY, P1, P2
+    }
+
+
 }

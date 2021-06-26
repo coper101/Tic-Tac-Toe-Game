@@ -23,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
+    private static final String TAG = HomeFragment.class.getSimpleName();
+
     // Views
     private Button joinButton, createButton;
 
@@ -82,8 +84,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     dbRef.child(DBHelper.GAME_ROOMS_KEY).child(id).setValue(gm);
                     dbRef.child(DBHelper.IDS_KEY).child("currentId").setValue(id);
                     // Navigate to Waiting Room
-                    Navigation.findNavController(requireView())
-                            .navigate(R.id.action_homeFragment_to_waitingRoomFragment);
+                    navigateToWaitingRoom(id);
+                }
+            }
+        });
+    }
+
+    private void navigateToWaitingRoom(String id) {
+        dbRef.child(DBHelper.GAME_ROOMS_KEY).child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e(TAG, "Error getting data", task.getException());
+                }
+                else {
+                    // Get Updated Game Room
+                    GameRoom gm = task.getResult().getValue(GameRoom.class);
+                    Log.d(TAG, gm.toString());
+                    // Navigate to Waiting Room
+                    HomeFragmentDirections.ActionHomeFragmentToWaitingRoomFragment directions
+                            = HomeFragmentDirections.actionHomeFragmentToWaitingRoomFragment(gm);
+                    Navigation.findNavController(requireView()).navigate(directions);
                 }
             }
         });

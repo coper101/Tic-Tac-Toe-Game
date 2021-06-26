@@ -2,6 +2,7 @@ package com.daryl.tictactoegame.Screens;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.daryl.tictactoegame.Data.DBHelper;
 import com.daryl.tictactoegame.Data.GameRoom;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
@@ -42,10 +45,20 @@ public class GameRoomsFragment extends Fragment implements RoomRVAdapter.OnItemC
 
     // Firebase DB
     private DatabaseReference dbRef;
+    private ValueEventListener valueEventListener;
+    private Query query;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Disable Back Navigation
+        OnBackPressedCallback callback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                Toast.makeText(getContext(), "cant go back", Toast.LENGTH_SHORT).show();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         dbRef = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -71,9 +84,10 @@ public class GameRoomsFragment extends Fragment implements RoomRVAdapter.OnItemC
     }
 
     private void loadGameRooms() {
-        dbRef.child(DBHelper.GAME_ROOMS_KEY).addValueEventListener(new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                gameRooms.clear();
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     Log.d(TAG, postSnapshot.getKey());
                     GameRoom gm = postSnapshot.getValue(GameRoom.class);
@@ -90,7 +104,9 @@ public class GameRoomsFragment extends Fragment implements RoomRVAdapter.OnItemC
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, error.toString());
             }
-        });
+        };
+        query = dbRef.child(DBHelper.GAME_ROOMS_KEY);
+        query.addValueEventListener(valueEventListener);
     }
 
     @Override
@@ -98,10 +114,29 @@ public class GameRoomsFragment extends Fragment implements RoomRVAdapter.OnItemC
         GameRoom gm = gameRooms.get(position);
         // Insert Player 2 - Game Room is now full
         dbRef.child(DBHelper.GAME_ROOMS_KEY).child(gm.getId()).child("p2").setValue("Player 2");
-        GameRoomsFragmentDirections.ActionGameRoomsFragmentToWaitingRoomFragment directions =
-                GameRoomsFragmentDirections.actionGameRoomsFragmentToWaitingRoomFragment(gm);
-        Navigation.findNavController(requireView()).navigate(directions);
+
+        dbRef.child(DBHelper.GAME_ROOMS_KEY).child(gm.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    // Get Updated Game Room
+                    GameRoom gm = task.getResult().getValue(GameRoom.class);
+                    Log.d("Updated Game Room", gm.toString());
+                    navigateToWaitingRoom(gm);
+                }
+            }
+        });
     }
 
+    private void navigateToWaitingRoom(GameRoom gm) {
+        GameRoomsFragmentDirections.ActionGameRoomsFragmentToWaitingRoomFragment directions =
+                GameRoomsFragmentDirections.actionGameRoomsFragmentToWaitingRoomFragment(gm);
+        directions.setIsPlayer2(true);
+        Navigation.findNavController(requireView()).navigate(directions);
+        query.removeEventListener(valueEventListener);
+    }
 
 }
