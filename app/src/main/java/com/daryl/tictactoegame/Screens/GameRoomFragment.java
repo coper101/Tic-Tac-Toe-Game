@@ -91,8 +91,8 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
         r1c1 = view.findViewById(R.id.r1c1);
         r1c2 = view.findViewById(R.id.r1c2);
         // 3rd row
-        r2c0 = view.findViewById(R.id.r2c1);
-        r2c1 = view.findViewById(R.id.r2c0);
+        r2c0 = view.findViewById(R.id.r2c0);
+        r2c1 = view.findViewById(R.id.r2c1);
         r2c2 = view.findViewById(R.id.r2c2);
 
         // 1st row
@@ -130,10 +130,10 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
             case R.id.r1c2:
                 insertToBoard(1, 2);
                 break;
-            case R.id.r2c1:
+            case R.id.r2c0:
                 insertToBoard(2, 0);
                 break;
-            case R.id.r2c0:
+            case R.id.r2c1:
                 insertToBoard(2, 1);
                 break;
             case R.id.r2c2:
@@ -227,7 +227,7 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
         String board = gm.getBoard();
         int[][] boardInt = GameRoomHelper.getBoardInt(board);
         int length = boardInt.length;
-        int count = 0;
+        int count = 0+3;
         StringBuilder message = new StringBuilder();
         for (int row = 0; row < length; row++) {
             for (int col = 0; col < length; col++) {
@@ -265,7 +265,7 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
     private void setTurn(boolean isTurn) {
         this.isTurn = isTurn;
         int bgDrawableId = isTurn ? R.drawable.mark_box : R.drawable.mark_box_not_turn;
-        for (int i = 0; i < boardCL.getChildCount(); i++) {
+        for (int i = 3; i < boardCL.getChildCount(); i++) {
             FrameLayout fl = (FrameLayout) boardCL.getChildAt(i);
             fl.setBackground(ContextCompat.getDrawable(getContext(), bgDrawableId));
         }

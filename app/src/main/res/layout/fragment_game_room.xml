@@ -7,7 +7,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Screens.GameRoomFragment">
+    tools:context=".Screens.GameRoomFragment"
+    android:background="@color/blue_dark">
+
+   <LinearLayout
+       android:id="@+id/linearLayout2"
+       android:layout_width="wrap_content"
+       android:layout_height="50dp"
+       android:layout_marginStart="24dp"
+       android:layout_marginTop="40dp"
+       android:orientation="horizontal"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent">
+
+      <ImageView
+          android:layout_width="50dp"
+          android:layout_height="match_parent"
+          android:layout_marginRight="10dp"
+          android:background="@color/blue_green_neon" />
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:orientation="vertical">
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="ID:"
+             android:textColor="@color/blue_green_neon" />
+
+         <TextView
+             android:id="@+id/game_r_id_text_view"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="40"
+             android:textColor="@color/blue_green_neon"
+             android:textSize="24sp" />
+
+      </LinearLayout>
+
+   </LinearLayout>
+
+   <LinearLayout
+       android:id="@+id/linearLayout"
+       android:layout_width="wrap_content"
+       android:layout_height="50dp"
+       android:layout_marginStart="30dp"
+       android:orientation="horizontal"
+       app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+       app:layout_constraintStart_toEndOf="@+id/linearLayout2">
+
+      <ImageView
+          android:layout_width="50dp"
+          android:layout_height="match_parent"
+          android:layout_marginRight="10dp"
+          android:background="@color/white" />
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:orientation="vertical">
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="You:"
+             android:textColor="@color/white" />
+
+         <TextView
+             android:id="@+id/player_name_text_view"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Player 2"
+             android:textColor="@color/white"
+             android:textSize="24sp" />
+
+      </LinearLayout>
+
+   </LinearLayout>
+
+   <Button
+       android:id="@+id/quit"
+       style="@style/RoundButton"
+       android:layout_width="50dp"
+       android:layout_height="0dp"
+       android:layout_marginTop="40dp"
+       android:text="Exit"
+       app:layout_constraintDimensionRatio="1"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toEndOf="@+id/linearLayout"
+       app:layout_constraintTop_toTopOf="parent" />
 
    <!-- First Row -->
    <FrameLayout
@@ -16,7 +106,7 @@
        android:layout_width="0dp"
        android:layout_height="0dp"
        android:layout_marginStart="20dp"
-       android:layout_marginTop="150dp"
+       android:layout_marginTop="200dp"
        app:layout_constraintDimensionRatio="1:1"
        app:layout_constraintEnd_toStartOf="@+id/r0c1"
        app:layout_constraintHorizontal_bias="0.5"

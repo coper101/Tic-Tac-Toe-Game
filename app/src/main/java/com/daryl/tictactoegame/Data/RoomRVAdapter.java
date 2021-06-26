@@ -47,7 +47,6 @@ public class RoomRVAdapter
     public void onBindViewHolder(@NonNull GameRoomViewHolder holder, int position) {
         final GameRoom gm = gameRooms.get(position);
         holder.idTV.setText(gm.getId());
-        holder.nameTV.setText(gm.getName());
     }
 
     private int toPx(int dp) {
@@ -64,15 +63,14 @@ public class RoomRVAdapter
     // Holder
     static class GameRoomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView idTV, nameTV;
+        TextView idTV;
         Button joinBtn;
         private final OnItemClickedListener clickedListener;
 
         public GameRoomViewHolder(@NonNull View itemView, OnItemClickedListener clickedListener) {
             super(itemView);
             this.clickedListener = clickedListener;
-            idTV = itemView.findViewById(R.id.game_room_id_text_view);
-            nameTV = itemView.findViewById(R.id.game_room_name_text_view);
+            idTV = itemView.findViewById(R.id.game_roomid_text_view);
             joinBtn = itemView.findViewById(R.id.game_room_join_button);
             joinBtn.setOnClickListener(this);
         }

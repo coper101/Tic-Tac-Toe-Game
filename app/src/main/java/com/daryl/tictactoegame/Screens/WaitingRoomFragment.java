@@ -37,7 +37,7 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
     // Views
     private View view;
     private Button readyButton;
-    private TextView waitingMessage;
+    private TextView waitingMessage, startMessage;
 
     // Firebase DB
     private DatabaseReference dbRef;
@@ -71,6 +71,7 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
         readyButton = view.findViewById(R.id.ready_button);
         waitingMessage = view.findViewById(R.id.waiting_msg_text_view);
         waitingMessage.setVisibility(View.GONE);
+        startMessage = view.findViewById(R.id.start_message_text_view);
         readyButton.setOnClickListener(this::onClick);
     }
 
@@ -97,6 +98,7 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
                 dbRef.child(DBHelper.GAME_ROOMS_KEY).child(gm.getId()).child("p2Ready").setValue(true);
             }
             readyButton.setVisibility(View.GONE);
+            startMessage.setVisibility(View.GONE);
         }
     }
 
