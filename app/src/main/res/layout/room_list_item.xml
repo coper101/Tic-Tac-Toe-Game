@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:layout_width="100dp"
@@ -49,7 +50,7 @@
                     android:id="@+id/game_roomid_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="40"
+                    android:text="34"
                     android:textColor="@color/white"
                     android:textSize="40sp"/>
 

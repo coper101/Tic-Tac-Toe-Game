@@ -7,7 +7,7 @@ public class GameRoom implements Serializable {
 
     private String id, name, p1, p2, board;
     private int winner, turn, turnCount;
-    private boolean p1Ready, p2Ready;
+    private boolean p1Ready, p2Ready, quitGame;
 
     public GameRoom() {}
 
@@ -101,6 +101,14 @@ public class GameRoom implements Serializable {
 
     public void setTurnCount(int turnCount) {
         this.turnCount = turnCount;
+    }
+
+    public boolean isQuitGame() {
+        return quitGame;
+    }
+
+    public void setQuitGame(boolean quitGame) {
+        this.quitGame = quitGame;
     }
 
     @Override

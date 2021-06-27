@@ -2,7 +2,6 @@ package com.daryl.tictactoegame.Screens;
 
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -24,6 +23,7 @@ import com.daryl.tictactoegame.Data.DBHelper;
 import com.daryl.tictactoegame.Data.GameDialog;
 import com.daryl.tictactoegame.Data.GameRoom;
 import com.daryl.tictactoegame.Data.GameRoomHelper;
+import com.daryl.tictactoegame.Data.QuitDialog;
 import com.daryl.tictactoegame.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +34,7 @@ import com.google.firebase.database.Query;
 
 import java.util.Arrays;
 
-public class GameRoomFragment extends Fragment implements View.OnClickListener, GameDialog.OnClickDialogListener {
+public class GameRoomFragment extends Fragment implements View.OnClickListener, GameDialog.OnClickDialogListener, QuitDialog.OnQuitDialogListener {
 
     private static final String TAG = GameRoomFragment.class.getSimpleName();
 
@@ -42,6 +42,7 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
     private GameRoom gm;
     private boolean isPlayer1;
     private boolean isTurn = true;
+    private boolean isHostQuit;
 
     // Firebase DB
     private DatabaseReference dbRef;
@@ -55,6 +56,7 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
                         r2c0, r2c1, r2c2;
 
     private GameDialog gameDialog;
+    private QuitDialog quitDialog;
     private ImageButton quitButton;
     private TextView gameRoomIdTV, playerNumTV;
     private ImageView playersMarkIV;
@@ -62,13 +64,6 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Disable Back Navigation
-        OnBackPressedCallback callback = new OnBackPressedCallback(false) {
-            @Override
-            public void handleOnBackPressed() {
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         dbRef = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -100,6 +95,7 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
 
     private void initViews(View view) {
         quitButton = view.findViewById(R.id.quit_imag_button);
+        quitButton.setOnClickListener(this::onClick);
         playerNumTV = view.findViewById(R.id.game_r_player_name_text_view);
         gameRoomIdTV = view.findViewById(R.id.game_r_id_text_view);
         playersMarkIV = view.findViewById(R.id.player_mark_image_view);
@@ -167,8 +163,7 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void quitRoom() {
-        // update other player
-
+        showQuitDialog(true);
     }
 
     private void insertToBoard(int row, int col) {
@@ -215,6 +210,11 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
                     // Take Turns
                     GameRoom.Turn turn = GameRoom.Turn.values()[gm1.getTurn()];
                     switchTurns(turn);
+                    // Check Other Player has quit the Room
+                    if (gm.isQuitGame()) {
+                        // Toast.makeText(getContext(), "Other Player has quit the game.", Toast.LENGTH_SHORT).show();
+                        showQuitDialog(false);
+                    }
                 }
             }
             @Override
@@ -345,9 +345,33 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
+    private void showQuitDialog(boolean isHost) {
+        isHostQuit = isHost;
+        quitDialog = new QuitDialog(isHostQuit);
+        quitDialog.setOnQuitDialogListener(this::onQuitDialog);
+        quitDialog.show(getActivity().getSupportFragmentManager(), "Quit Dialog");
+    }
+
+    @Override
+    public void onQuitDialog(View view) {
+        switch (view.getId()) {
+            case R.id.quit_dialog_cancel_button:
+                quitDialog.dismiss();
+                break;
+            case R.id.quit_dialog_quit_button:
+                if (isHostQuit) {
+                    dbRef.child(DBHelper.GAME_ROOMS_KEY).child(gm.getId()).child("quitGame").setValue(true);
+                }
+                // Navigate to Home
+                Navigation.findNavController(requireView()).navigate(R.id.action_gameRoomFragment_to_homeFragment);
+                quitDialog.dismiss();
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
         query.removeEventListener(childEventListener);
     }
+
 }

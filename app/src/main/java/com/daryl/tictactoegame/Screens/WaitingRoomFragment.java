@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.daryl.tictactoegame.Data.DBHelper;
 import com.daryl.tictactoegame.Data.GameRoom;
+import com.daryl.tictactoegame.Data.GameRoomHelper;
 import com.daryl.tictactoegame.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -86,7 +87,7 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
         isPlayer2 = args.getIsPlayer2();
         gameRoomIdTV.setText(gm.getId());
         playerNumTV.setText(isPlayer2 ? "Player 2" : "Player 1");
-        Toast.makeText(getContext(), "isPlayer2: " + isPlayer2, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), "isPlayer2: " + isPlayer2, Toast.LENGTH_SHORT).show();
         allReady();
     }
 
