@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daryl.tictactoegame.Data.DBHelper;
@@ -53,6 +55,9 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
                         r2c0, r2c1, r2c2;
 
     private GameDialog gameDialog;
+    private ImageButton quitButton;
+    private TextView gameRoomIdTV, playerNumTV;
+    private ImageView playersMarkIV;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,11 +87,22 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
         GameRoomFragmentArgs args = GameRoomFragmentArgs.fromBundle(getArguments());
         gm = args.getGameRoom();
         isPlayer1 = args.getIsPlayer1();
-        Toast.makeText(getContext(), "isPlayer1: " + isPlayer1 , Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), "isPlayer1: " + isPlayer1 , Toast.LENGTH_SHORT).show();
+        playerNumTV.setText(isPlayer1 ? "Player 1" : "Player 2");
+        gameRoomIdTV.setText(gm.getId());
+        // Set Player Label
+        int colorInt = isPlayer1 ? R.color.blue_green_neon : R.color.white;
+        int drawableInt = isPlayer1 ? R.drawable.ic_circle : R.drawable.ic_x;
+        playersMarkIV.setBackground(ContextCompat.getDrawable(getContext(), drawableInt));
+        playersMarkIV.setBackgroundTintList(getContext().getColorStateList(colorInt));
         updateTurn();
     }
 
     private void initViews(View view) {
+        quitButton = view.findViewById(R.id.quit_imag_button);
+        playerNumTV = view.findViewById(R.id.game_r_player_name_text_view);
+        gameRoomIdTV = view.findViewById(R.id.game_r_id_text_view);
+        playersMarkIV = view.findViewById(R.id.player_mark_image_view);
         boardCL = view.findViewById(R.id.board_constraint_layout);
         // 1st row
         r0c0 = view.findViewById(R.id.r0c0);
@@ -144,7 +160,15 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
                 break;
             case R.id.r2c2:
                 insertToBoard(2, 2);
+                break;
+            case R.id.quit_imag_button:
+                quitRoom();
         }
+    }
+
+    private void quitRoom() {
+        // update other player
+
     }
 
     private void insertToBoard(int row, int col) {
@@ -248,7 +272,7 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener, 
         }
 
         if (gm.getTurnCount() == 9) {
-            showGameDialog("I'ts a Tie", "", "Ahh!");
+            showGameDialog("It's a Draw", "", "Ahh!");
             return true;
         }
         return false;

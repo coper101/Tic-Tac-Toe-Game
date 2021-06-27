@@ -1,5 +1,7 @@
 package com.daryl.tictactoegame.Data;
 
+import java.util.Random;
+
 public class GameRoomHelper {
 
     // [["0", "0", "0"] ...] -> [[0, 0, 0] ...]
@@ -60,5 +62,11 @@ public class GameRoomHelper {
         }
 
         return 0;
+    }
+
+    public static int assignPlayer() {
+        Random r = new Random();
+        // Either Player 1 or 2
+        return r.nextInt(2) + 1;
     }
 }

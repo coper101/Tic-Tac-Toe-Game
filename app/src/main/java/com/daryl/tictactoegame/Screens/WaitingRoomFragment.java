@@ -37,7 +37,7 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
     // Views
     private View view;
     private Button readyButton;
-    private TextView waitingMessage, startMessage;
+    private TextView waitingMessageTV, startMessageTV, gameRoomIdTV, playerNumTV;
 
     // Firebase DB
     private DatabaseReference dbRef;
@@ -69,9 +69,11 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
 
     private void initViews(View view) {
         readyButton = view.findViewById(R.id.ready_button);
-        waitingMessage = view.findViewById(R.id.waiting_msg_text_view);
-        waitingMessage.setVisibility(View.GONE);
-        startMessage = view.findViewById(R.id.start_message_text_view);
+        waitingMessageTV = view.findViewById(R.id.waiting_msg_text_view);
+        waitingMessageTV.setVisibility(View.GONE);
+        startMessageTV = view.findViewById(R.id.start_message_text_view);
+        gameRoomIdTV = view.findViewById(R.id.waiting_room_game_id);
+        playerNumTV = view.findViewById(R.id.waiting_player_num_text_view);
         readyButton.setOnClickListener(this::onClick);
     }
 
@@ -82,6 +84,8 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
         WaitingRoomFragmentArgs args = WaitingRoomFragmentArgs.fromBundle(bundle);
         gm = args.getGameRoom();
         isPlayer2 = args.getIsPlayer2();
+        gameRoomIdTV.setText(gm.getId());
+        playerNumTV.setText(isPlayer2 ? "Player 2" : "Player 1");
         Toast.makeText(getContext(), "isPlayer2: " + isPlayer2, Toast.LENGTH_SHORT).show();
         allReady();
     }
@@ -89,7 +93,7 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.ready_button) {
-            waitingMessage.setVisibility(View.VISIBLE);
+            waitingMessageTV.setVisibility(View.VISIBLE);
             if (!isPlayer2) {
                 // Player 1 is Ready
                 dbRef.child(DBHelper.GAME_ROOMS_KEY).child(gm.getId()).child("p1Ready").setValue(true);
@@ -98,7 +102,7 @@ public class WaitingRoomFragment extends Fragment implements View.OnClickListene
                 dbRef.child(DBHelper.GAME_ROOMS_KEY).child(gm.getId()).child("p2Ready").setValue(true);
             }
             readyButton.setVisibility(View.GONE);
-            startMessage.setVisibility(View.GONE);
+            startMessageTV.setVisibility(View.GONE);
         }
     }
 

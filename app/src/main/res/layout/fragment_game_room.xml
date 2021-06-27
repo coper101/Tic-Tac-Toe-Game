@@ -23,8 +23,9 @@
       <ImageView
           android:layout_width="50dp"
           android:layout_height="match_parent"
-          android:layout_marginRight="10dp"
-          android:background="@color/blue_green_neon" />
+          android:layout_marginEnd="10dp"
+          android:src="@drawable/ic_game_room_thick"
+          app:tint="@color/blue_green_neon"/>
 
       <LinearLayout
           android:layout_width="wrap_content"
@@ -53,7 +54,7 @@
        android:id="@+id/linearLayout"
        android:layout_width="wrap_content"
        android:layout_height="50dp"
-       android:layout_marginStart="30dp"
+       android:layout_marginStart="15dp"
        android:orientation="horizontal"
        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
        app:layout_constraintStart_toEndOf="@+id/linearLayout2">
@@ -61,42 +62,58 @@
       <ImageView
           android:layout_width="50dp"
           android:layout_height="match_parent"
-          android:layout_marginRight="10dp"
-          android:background="@color/white" />
+          android:layout_marginRight="8dp"
+          android:padding="2dp"
+          android:src="@drawable/ic_player_thick"
+          app:tint="@color/white" />
 
       <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:orientation="vertical">
 
-         <TextView
+         <LinearLayout
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:text="You:"
-             android:textColor="@color/white" />
+             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:text="You:"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/player_mark_image_view"
+                android:layout_width="20dp"
+                android:layout_height="20dp"/>
+
+         </LinearLayout>
 
          <TextView
-             android:id="@+id/player_name_text_view"
+             android:id="@+id/game_r_player_name_text_view"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="Player 2"
              android:textColor="@color/white"
-             android:textSize="24sp" />
+             android:textSize="22sp" />
 
       </LinearLayout>
 
    </LinearLayout>
 
-   <Button
-       android:id="@+id/quit"
+   <ImageButton
+       android:id="@+id/quit_imag_button"
        style="@style/RoundButton"
-       android:layout_width="50dp"
+       android:layout_width="45dp"
        android:layout_height="0dp"
-       android:layout_marginTop="40dp"
+       android:layout_marginTop="43dp"
+       android:layout_marginEnd="24dp"
+       android:src="@drawable/ic_quit"
        android:text="Exit"
        app:layout_constraintDimensionRatio="1"
        app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toEndOf="@+id/linearLayout"
        app:layout_constraintTop_toTopOf="parent" />
 
    <!-- First Row -->
