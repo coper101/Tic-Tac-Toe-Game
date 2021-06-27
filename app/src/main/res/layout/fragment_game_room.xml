@@ -112,7 +112,8 @@
        app:layout_constraintHorizontal_bias="0.5"
        app:layout_constraintHorizontal_chainStyle="packed"
        app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent">
+       app:layout_constraintTop_toTopOf="parent"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
@@ -127,7 +128,8 @@
        app:layout_constraintDimensionRatio="1:1"
        app:layout_constraintEnd_toStartOf="@+id/r0c2"
        app:layout_constraintHorizontal_bias="0.5"
-       app:layout_constraintStart_toEndOf="@+id/r0c0">
+       app:layout_constraintStart_toEndOf="@+id/r0c0"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
@@ -143,7 +145,8 @@
        app:layout_constraintDimensionRatio="1:1"
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintHorizontal_bias="0.5"
-       app:layout_constraintStart_toEndOf="@+id/r0c1">
+       app:layout_constraintStart_toEndOf="@+id/r0c1"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
@@ -160,7 +163,8 @@
        app:layout_constraintHorizontal_bias="0.5"
        app:layout_constraintHorizontal_chainStyle="packed"
        app:layout_constraintStart_toStartOf="@+id/r0c0"
-       app:layout_constraintTop_toBottomOf="@+id/r0c0">
+       app:layout_constraintTop_toBottomOf="@+id/r0c0"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
@@ -175,7 +179,8 @@
        app:layout_constraintDimensionRatio="1:1"
        app:layout_constraintEnd_toStartOf="@+id/r1c2"
        app:layout_constraintHorizontal_bias="0.5"
-       app:layout_constraintStart_toEndOf="@+id/r1c0">
+       app:layout_constraintStart_toEndOf="@+id/r1c0"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
@@ -190,7 +195,8 @@
        app:layout_constraintDimensionRatio="1:1"
        app:layout_constraintEnd_toEndOf="@+id/r0c2"
        app:layout_constraintHorizontal_bias="0.5"
-       app:layout_constraintStart_toEndOf="@+id/r1c1">
+       app:layout_constraintStart_toEndOf="@+id/r1c1"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
@@ -208,7 +214,8 @@
        app:layout_constraintHorizontal_bias="0.5"
        app:layout_constraintHorizontal_chainStyle="packed"
        app:layout_constraintStart_toStartOf="@+id/r1c0"
-       app:layout_constraintTop_toBottomOf="@+id/r1c0">
+       app:layout_constraintTop_toBottomOf="@+id/r1c0"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
@@ -223,7 +230,8 @@
        app:layout_constraintDimensionRatio="1:1"
        app:layout_constraintEnd_toStartOf="@+id/r2c2"
        app:layout_constraintHorizontal_bias="0.5"
-       app:layout_constraintStart_toEndOf="@+id/r2c0">
+       app:layout_constraintStart_toEndOf="@+id/r2c0"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
@@ -238,7 +246,8 @@
        app:layout_constraintDimensionRatio="1:1"
        app:layout_constraintEnd_toEndOf="@+id/r1c2"
        app:layout_constraintHorizontal_bias="0.5"
-       app:layout_constraintStart_toEndOf="@+id/r2c1">
+       app:layout_constraintStart_toEndOf="@+id/r2c1"
+       android:padding="15dp">
       <ImageView
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>

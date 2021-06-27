@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.daryl.tictactoegame.Data.DBHelper;
+import com.daryl.tictactoegame.Data.GameDialog;
 import com.daryl.tictactoegame.Data.GameRoom;
 import com.daryl.tictactoegame.Data.GameRoomHelper;
 import com.daryl.tictactoegame.R;
@@ -30,7 +32,7 @@ import com.google.firebase.database.Query;
 
 import java.util.Arrays;
 
-public class GameRoomFragment extends Fragment implements View.OnClickListener {
+public class GameRoomFragment extends Fragment implements View.OnClickListener, GameDialog.OnClickDialogListener {
 
     private static final String TAG = GameRoomFragment.class.getSimpleName();
 
@@ -41,12 +43,16 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
 
     // Firebase DB
     private DatabaseReference dbRef;
+    private ChildEventListener childEventListener;
+    private Query query;
 
     // Board Game Views
     private ConstraintLayout boardCL;
     private FrameLayout r0c0, r0c1, r0c2,
                         r1c0, r1c1, r1c2,
                         r2c0, r2c1, r2c2;
+
+    private GameDialog gameDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -153,14 +159,16 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
             // Update Turn
             gm.setTurn(isPlayer1 ? 2 : 1);
             Toast.makeText(getContext(), "New Turn: " + gm.getTurn(), Toast.LENGTH_SHORT).show();
+            // Update Turn Count
+            gm.setTurnCount(gm.getTurnCount() + 1);
             // Update Game Room in DB
             dbRef.child(DBHelper.GAME_ROOMS_KEY).child(gm.getId()).setValue(gm);
         }
     }
 
     private void updateTurn() {
-        Query query = dbRef.child(DBHelper.GAME_ROOMS_KEY);
-        query.addChildEventListener(new ChildEventListener() {
+        query = dbRef.child(DBHelper.GAME_ROOMS_KEY);
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
             @Override
@@ -191,33 +199,56 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
-        });
+        };
+        query.addChildEventListener(childEventListener);
     }
 
     private boolean decideWinner() {
         int winner = gm.getWinner();
-        if (winner != 0) {
+        if (winner != 0 && gm.getTurnCount() <= 9) {
+            String title = "";
+            String subtitle = "";
+            String buttonTitle = "";
             if (winner == 1) {
                 // Player 1 is Winner
                 if (isPlayer1) {
                     // Display Winner
-                    Toast.makeText(getContext(), "You Won!", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(), "You Won!", Toast.LENGTH_SHORT).show();
+                    title = "You Won!";
+                    subtitle = "You're a pro.";
+                    buttonTitle = "Hooray!";
                 } else {
                     // Display Loser
-                    Toast.makeText(getContext(), "You Lose!", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(), "You Lose!", Toast.LENGTH_SHORT).show();
+                    title = "You Lost!";
+                    subtitle = "Better luck next time.";
+                    buttonTitle = "Aww!";
                 }
+                showGameDialog(title, subtitle, buttonTitle);
                 isTurn = false;
             } else if (winner == 2) {
                 // Player 2 is Winner
                 if (!isPlayer1) {
                     // Display Winner
-                    Toast.makeText(getContext(), "You Won!", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(), "You Won!", Toast.LENGTH_SHORT).show();
+                    title = "You Won!";
+                    subtitle = "You're a pro.";
+                    buttonTitle = "Hooray!";
                 } else {
                     // Display Loser
-                    Toast.makeText(getContext(), "You Lose!", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(), "You Lose!", Toast.LENGTH_SHORT).show();
+                    title = "You Lost!";
+                    subtitle = "Better luck next time.";
+                    buttonTitle = "Aww!";
                 }
+                showGameDialog(title, subtitle, buttonTitle);
                 isTurn = false;
             }
+            return true;
+        }
+
+        if (gm.getTurnCount() == 9) {
+            showGameDialog("I'ts a Tie", "", "Ahh!");
             return true;
         }
         return false;
@@ -236,8 +267,12 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
                 ImageView iv = (ImageView) fl.getChildAt(0);
                 if (boardInt[row][col] == 1) {
                     iv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_circle));
+                    iv.setBackgroundTintList(getContext().getColorStateList(R.color.blue_green_neon));
+                    fl.setOnClickListener(null);
                 } else if (boardInt[row][col] == 2) {
-                    iv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_close));
+                    iv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_x));
+                    iv.setBackgroundTintList(getContext().getColorStateList(R.color.white));
+                    fl.setOnClickListener(null);
                 } else {
                     iv.setBackground(null);
                 }
@@ -271,4 +306,24 @@ public class GameRoomFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void showGameDialog(String title, String subtitle, String buttonTitle) {
+        gameDialog = new GameDialog(title, subtitle, buttonTitle);
+        gameDialog.setOnClickDialogListener(this::onClickDialog);
+        gameDialog.show(getActivity().getSupportFragmentManager(), "Game Dialog");
+    }
+
+    @Override
+    public void onClickDialog() {
+        // Navigate to Home
+        Navigation.findNavController(requireView()).navigate(R.id.action_gameRoomFragment_to_homeFragment);
+        if (gameDialog != null) {
+            gameDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        query.removeEventListener(childEventListener);
+    }
 }

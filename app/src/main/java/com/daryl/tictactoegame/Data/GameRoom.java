@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class GameRoom implements Serializable {
 
     private String id, name, p1, p2, board;
-    private int winner, turn;
+    private int winner, turn, turnCount;
     private boolean p1Ready, p2Ready;
 
     public GameRoom() {}
@@ -18,6 +18,7 @@ public class GameRoom implements Serializable {
         p2 = "";
         winner = Winner.NONE.ordinal();
         turn = Turn.BOTH.ordinal();
+        turnCount = 0;
         final int[][] boardInt = new int[3][3];
         board = Arrays.deepToString(boardInt);
     }
@@ -92,6 +93,14 @@ public class GameRoom implements Serializable {
 
     public void setP2Ready(boolean p2Ready) {
         this.p2Ready = p2Ready;
+    }
+
+    public int getTurnCount() {
+        return turnCount;
+    }
+
+    public void setTurnCount(int turnCount) {
+        this.turnCount = turnCount;
     }
 
     @Override
